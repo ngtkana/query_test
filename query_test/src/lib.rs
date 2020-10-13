@@ -22,6 +22,12 @@ pub trait Query {
 pub trait Gen<Q: Query, G> {
     fn gen(&self, rng: &mut impl Rng) -> Q::Param;
 }
+pub trait HelpMaterial {
+    type Value;
+}
+pub trait Help<H: HelpMaterial> {
+    fn help(rng: &mut impl Rng) -> H::Value;
+}
 
 pub mod solve {
     use crate::Query;
