@@ -13,7 +13,7 @@ macro_rules! impl_help {
         $(
             impl $crate::Help<$ty> for G {
                 fn help(rng: &mut impl Rng) -> <$ty as $crate::HelpMaterial>::Value {
-                    use apply::Apply;
+                    use $crate::apply::Apply;
                     rng.apply($closure)
                 }
             }
