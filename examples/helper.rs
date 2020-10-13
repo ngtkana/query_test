@@ -74,18 +74,12 @@ pub mod vector {
 
 pub mod gen_example {
     use super::helpers;
-    use query_test::Help;
+    use query_test::impl_help;
     use rand::Rng;
 
     pub struct G {}
-    impl Help<helpers::Len> for G {
-        fn help(rng: &mut impl Rng) -> usize {
-            rng.gen_range(1, 20)
-        }
-    }
-    impl Help<helpers::Value<u32>> for G {
-        fn help(rng: &mut impl Rng) -> u32 {
-            rng.gen_range(0, 20)
-        }
+    impl_help! {
+        helpers::Len, |rng| rng.gen_range(1, 20);
+        helpers::Value<u32>, |rng| rng.gen_range(0, 20);
     }
 }
