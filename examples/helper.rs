@@ -1,19 +1,15 @@
 pub mod helpers {
-    use query_test::HelpMaterial;
+    use query_test::{help_material, HelpMaterial};
     use std::marker::PhantomData;
 
+    #[help_material(usize)]
     pub struct Len();
-    impl HelpMaterial for Len {
-        type Value = usize;
-    }
+
+    #[help_material(T)]
     pub struct Value<T>(PhantomData<T>);
-    impl<T> HelpMaterial for Value<T> {
-        type Value = T;
-    }
+
+    #[help_material(T)]
     pub struct Key<T>(PhantomData<T>);
-    impl<T> HelpMaterial for Key<T> {
-        type Value = T;
-    }
 }
 
 pub mod gen_example {
