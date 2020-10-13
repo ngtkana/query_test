@@ -2,6 +2,8 @@ mod logger;
 mod test_impl;
 
 #[doc(hidden)]
+pub use apply;
+#[doc(hidden)]
 pub use query_test_attr::*;
 
 use rand::prelude::*;
