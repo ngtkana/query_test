@@ -7,6 +7,20 @@ pub use query_test_attr::*;
 use rand::prelude::*;
 use std::{cell::RefCell, fmt::Debug, marker::PhantomData};
 
+#[macro_export]
+macro_rules! impl_help {
+    ($($ty:ty, $closure:expr;)*) => {
+        $(
+            impl $crate::Help<$ty> for G {
+                fn help(rng: &mut impl Rng) -> <$ty as $crate::HelpMaterial>::Value {
+                    use apply::Apply;
+                    rng.apply($closure)
+                }
+            }
+        )*
+    };
+}
+
 pub trait Init<G> {
     fn init(rng: &mut impl Rng) -> Self;
 }
