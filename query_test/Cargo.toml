@@ -10,3 +10,13 @@ edition = "2018"
 query_test_attr = { path = "../query_test_attr" }
 rand = "0.7.3"
 yansi = "0.5.0"
+
+[[example]]
+name = "queries"
+path = "../examples/queries.rs"
+crate-type = [ "staticlib" ]
+
+[[example]]
+name = "helper"
+path = "../examples/helper.rs"
+crate-type = [ "staticlib" ]
