@@ -1,5 +1,9 @@
-use crate::{Config, Query, Tester};
+use crate::{query, Config, Query, Tester};
 use std::{fmt::Debug, marker::PhantomData};
+
+#[query(fn(()))]
+#[derive(Debug, Clone, PartialEq, Copy, Eq)]
+pub struct NoQuery();
 
 pub struct Logger<'a, R, B, F, G, Q: Query> {
     pub tester: &'a Tester<R, B, F, G>,
@@ -16,17 +20,21 @@ where
     B: Debug + Clone,
     F: Debug + Clone,
 {
+    pub fn print_new(&self) {
+        use ItemCell::*;
+        self.table(vec![vec![New], vec![Brute], vec![Fast]]).print();
+    }
     pub fn mutate(&self)
     where
         Q: Query<Output = ()>,
     {
-        match crate::CONFIG {
+        match self.tester.config {
             Config::Short => self.mutate_short(),
             Config::Verbose => self.mutate_verbose(),
         }
     }
     pub fn passing(&self) {
-        match crate::CONFIG {
+        match self.tester.config {
             Config::Short => self.passing_short(),
             Config::Verbose => self.passing_verbose(),
         }
@@ -84,6 +92,7 @@ where
         use ItemCell::*;
         match item_cell {
             N => String::new(),
+            New => items::item_new(),
             FailingMsg => items::failing_msg(),
             Failing => items::failing(),
             Passing => items::passing(),
@@ -106,6 +115,7 @@ where
 #[allow(dead_code)]
 enum ItemCell {
     N,
+    New,
     FailingMsg,
     Failing,
     Passing,
@@ -156,6 +166,10 @@ mod items {
         .to_string()
     }
     msg_fn! {
+        pub(super) fn item_new {
+            name: "Initialized an instance",
+            color: Color::Green,
+        }
         pub(super) fn failing_msg {
             name: "Failed in a test!",
             color: Color::Red,

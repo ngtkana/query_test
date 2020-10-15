@@ -1,4 +1,7 @@
-use super::{logger::Logger, solve, FromBrute, Gen, Init, Query, Tester};
+use super::{
+    logger::{Logger, NoQuery},
+    solve, Config, FromBrute, Gen, Init, Query, Tester,
+};
 use rand::Rng;
 use std::{
     cell::{RefCell, RefMut},
@@ -16,15 +19,25 @@ where
     pub fn rng_mut(&self) -> RefMut<R> {
         self.rng.borrow_mut()
     }
-    pub fn new(mut rng: R) -> Self {
+    pub fn new(mut rng: R, config: Config) -> Self {
         let brute = B::init(&mut rng);
         let fast = F::from_brute(&brute);
-        Self {
+        let me = Self {
             rng: RefCell::new(rng),
             brute,
             fast,
             marker: PhantomData::<G>,
+            config,
+        };
+        Logger {
+            tester: &me,
+            param: (),
+            output: None,
+            expected: None,
+            marker: PhantomData::<NoQuery>,
         }
+        .print_new();
+        me
     }
     pub fn initialize(&mut self) {
         let brute = B::init(self.rng_mut().deref_mut());

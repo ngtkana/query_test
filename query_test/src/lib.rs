@@ -62,12 +62,11 @@ pub mod solve {
 }
 
 #[allow(dead_code)]
-enum Config {
+#[derive(Debug, Clone, PartialEq, Copy, Eq)]
+pub enum Config {
     Short,
     Verbose,
 }
-
-const CONFIG: Config = Config::Short;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Tester<R, B, F, G> {
@@ -75,4 +74,5 @@ pub struct Tester<R, B, F, G> {
     brute: B,
     fast: F,
     marker: PhantomData<G>,
+    config: Config,
 }
