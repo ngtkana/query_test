@@ -22,7 +22,14 @@ where
 {
     pub fn print_new(&self) {
         use ItemCell::*;
-        self.table(vec![vec![New], vec![Brute], vec![Fast]]).print();
+        self.table(vec![
+            Vec::new(),
+            vec![New],
+            vec![Brute],
+            vec![Fast],
+            Vec::new(),
+        ])
+        .print();
     }
     pub fn mutate(&self)
     where

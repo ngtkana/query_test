@@ -22,28 +22,27 @@ where
     pub fn new(mut rng: R, config: Config) -> Self {
         let brute = B::init(&mut rng);
         let fast = F::from_brute(&brute);
-        let me = Self {
+        Self {
             rng: RefCell::new(rng),
             brute,
             fast,
             marker: PhantomData::<G>,
             config,
-        };
-        Logger {
-            tester: &me,
-            param: (),
-            output: None,
-            expected: None,
-            marker: PhantomData::<NoQuery>,
         }
-        .print_new();
-        me
     }
     pub fn initialize(&mut self) {
         let brute = B::init(self.rng_mut().deref_mut());
         let fast = F::from_brute(&brute);
         self.brute = brute;
         self.fast = fast;
+        Logger {
+            tester: self,
+            param: (),
+            output: None,
+            expected: None,
+            marker: PhantomData::<NoQuery>,
+        }
+        .print_new();
     }
     pub fn compare<Q: Query>(&self)
     where
